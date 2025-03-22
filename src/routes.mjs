@@ -20,7 +20,7 @@ router.get("/cover-groups", (_req, res) => {
 });
 
 router.get("/covergroup-heatmap", (req, res) => {
-  const { size } = req.query;
+  let { size } = req.query;
   const half = Math.floor(COVERGROUPS.length / 2);
   const threeFourth = Math.floor(COVERGROUPS.length / 3);
   size = size || half;
