@@ -20,7 +20,7 @@ router.get("/cover-groups", (_req, res) => {
 });
 
 router.get("/covergroup-heatmap", (req, res) => {
-  let { size } = req.query;
+  const { size } = req.query;
   const half = Math.floor(COVERGROUPS.length / 2);
   const threeFourth = Math.floor(COVERGROUPS.length / 3);
   size = size || half;
@@ -48,12 +48,21 @@ router.get("/cover-groups/:cgId/clusters", (req, res) => {
   }
 
   const clusters = cvg.clusters.map(cl => {
+    const uniqueCoverpoints = new Set();
+    cl.crosses.forEach(cross => {
+      cross.coverpoints.forEach(cp => {
+        uniqueCoverpoints.add(cp.id);
+      });
+    });
+  
     return {
       id: cl.id,
       name: cl.name,
-      numOfCrosses: cl.crosses.length
-    }
+      numOfCrosses: cl.crosses.length,
+      numOfCoverpoints: uniqueCoverpoints.size
+    };
   });
+  
   return res.status(200).json(clusters);
 });
 
